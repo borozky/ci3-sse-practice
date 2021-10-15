@@ -1,0 +1,71 @@
+version: "3"
+
+services:
+
+  web:
+    build:
+      dockerfile: Dockerfile
+      context: ./.docker/web
+      args:
+        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+        - user=${USER}
+        - uid=1000
+    volumes:
+      - ./:/var/www
+      - ./.docker/logs/xdebug:/logs/xdebug
+      - ./.docker/web/custom.conf:/usr/local/etc/php-fpm.d/zz-custom.conf
+      - ./.docker/web/xdebug.ini:/usr/local/etc/php/conf.d/zz-xdebug.ini
+      - ./.docker/web/php.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./.docker/web/cacert.pem:/usr/local/etc/php/cacert.pem
+      - ./.docker/logs/php-fpm/:/var/log/php-fpm
+      - ./.docker/logs/mercure/:/var/log/mercure
+      - ./.docker/logs/xdebug/:/tmp/xdebug_log
+      - ./.docker/logs/supervisor:/var/log/supervisor
+      - ./.docker/web/supervisord.conf:/var/run/supervisord.conf
+      - /var/www/.docker
+      # - ./.docker/web:/var/run
+    ports:
+      - "6001:6001"
+
+  nginx:
+    image: nginx:1.14
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8000:8000"
+    volumes:
+      - ./:/var/www
+      - ./.docker/logs/nginx:/logs/nginx
+      - ./.docker/nginx/xdebug:/etc/nginx/xdebug
+      - ./.docker/nginx/hosts:/etc/nginx/hosts
+      - ./.docker/nginx/ssl:/etc/nginx/ssl
+      - ./.docker/nginx/init.conf:/etc/nginx/conf.d/default.conf
+      - /var/www/.docker
+
+    depends_on:
+      - web
+
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./.docker/initdb:/docker-entrypoint-initdb.d
+      - ./.docker/data/mysql:/var/lib/mysql:rw
+      - ./.docker/logs/mysql:/var/log/mysql
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}    # 000.sql will be seeded as mysql root user
+    ports:
+      - "3306:3306"
+  
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,7 +1,7 @@
 # Experimenting Codeigniter 3 with Server-Sent events
 
 ## Setup
-Assuming you have docker installed and have cloned the directory
+Assuming you have docker installed and have cloned the project, inside `ci3-sse-practice`, you can setup using these commands:
 
 ```sh
 # Create .env file.

@@ -18,7 +18,6 @@ services:
       - ./.docker/web/php.ini:/usr/local/etc/php/conf.d/local.ini
       - ./.docker/web/cacert.pem:/usr/local/etc/php/cacert.pem
       - ./.docker/logs/php-fpm/:/var/log/php-fpm
-      - ./.docker/logs/mercure/:/var/log/mercure
       - ./.docker/logs/xdebug/:/tmp/xdebug_log
       - ./.docker/logs/supervisor:/var/log/supervisor
       - ./.docker/web/supervisord.conf:/var/run/supervisord.conf

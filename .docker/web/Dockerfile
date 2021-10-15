@@ -48,10 +48,10 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get install -y yarn
 
 
-RUN wget https://github.com/dunglas/mercure/releases/download/v0.10.2/mercure_0.10.2_Linux_x86_64.tar.gz \
-    && mkdir mercure \
-    && tar -zxvf mercure_0.10.2_Linux_x86_64.tar.gz -C mercure \
-    && mv mercure /mercure
+# RUN wget https://github.com/dunglas/mercure/releases/download/v0.10.2/mercure_0.10.2_Linux_x86_64.tar.gz \
+#     && mkdir mercure \
+#     && tar -zxvf mercure_0.10.2_Linux_x86_64.tar.gz -C mercure \
+#     && mv mercure /mercure
     
 RUN pwd && ls -la && ls -la /
 
